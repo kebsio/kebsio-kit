@@ -1,8 +1,6 @@
-main: "cc.dreamcode.template.BukkitTemplatePlugin"
+main: "dev.kebsio.kit.KitsPlugin"
 version: "1.0-InDEV"
-name: "Dream-Template"
-description: "Dream-Template plugin written by dreamcode.cc"
-website: "https://dreamcode.cc"
-author: "author"
-prefix: "Dream-Template-Bukkit"
+name: "kebsio-kit"
+description: "kebsio-kit plugin written by kebsio"
+author: "kebsio"
 api-version: 1.13
