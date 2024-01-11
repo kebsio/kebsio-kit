@@ -17,7 +17,8 @@ import cc.dreamcode.platform.persistence.component.DocumentPersistenceComponentR
 import cc.dreamcode.platform.persistence.component.DocumentRepositoryComponentResolver;
 import dev.kebsio.kit.config.MessageConfig;
 import dev.kebsio.kit.config.PluginConfig;
-import dev.kebsio.kit.controller.ExampleUserController;
+import dev.kebsio.kit.user.UserCache;
+import dev.kebsio.kit.user.controller.UserController;
 import dev.kebsio.kit.user.UserRepository;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -63,9 +64,10 @@ public final class KitsPlugin extends DreamBukkitPlatform implements DreamBukkit
 
             componentManager.registerComponent(DocumentPersistence.class);
             componentManager.registerComponent(UserRepository.class);
+            componentManager.registerComponent(UserCache.class);
         });
 
-        componentManager.registerComponent(ExampleUserController.class);
+        componentManager.registerComponent(UserController.class);
     }
 
     @Override

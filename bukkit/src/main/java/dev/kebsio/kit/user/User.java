@@ -7,6 +7,7 @@ import eu.okaeri.persistence.document.Document;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -15,9 +16,18 @@ import java.util.UUID;
 public class User extends Document {
 
     private String name;
+    private Map<String, Long> kitCooldowns;
 
     public UUID getUniqueId() {
         return this.getPath().toUUID();
     }
 
+    public long getCooldownTime(String name) {
+        return this.kitCooldowns.get(name.toLowerCase());
+    }
+
+    public void addCooldownTime(String name, long time){
+        this.kitCooldowns.put(name.toLowerCase(), System.currentTimeMillis()+time);
+
+    }
 }

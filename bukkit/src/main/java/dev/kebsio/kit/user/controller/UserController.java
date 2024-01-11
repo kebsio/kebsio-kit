@@ -1,6 +1,8 @@
-package dev.kebsio.kit.controller;
+package dev.kebsio.kit.user.controller;
 
 import dev.kebsio.kit.KitsPlugin;
+import dev.kebsio.kit.user.User;
+import dev.kebsio.kit.user.UserCache;
 import dev.kebsio.kit.user.UserRepository;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.tasker.core.Tasker;
@@ -10,16 +12,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-/**
- * Example usage of user repository.
- * Register controller in plugin component system.
- */
 @RequiredArgsConstructor(onConstructor_= @Inject)
-public class ExampleUserController implements Listener {
+public class UserController implements Listener {
 
     private final KitsPlugin kitsPlugin;
     private final UserRepository userRepository;
     private final Tasker tasker;
+    private final UserCache userCache;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
@@ -27,15 +26,14 @@ public class ExampleUserController implements Listener {
 
         // 5 sync task (1 task = 1 tick)
         this.tasker.newChain()
-                .async(() -> this.userRepository.findOrCreateByHumanEntity(player)) // async create user
-                .acceptSync(user -> {
-                    user.setName(player.getName()); // example setter (only for example)
+                .async(() -> {
+                    User user=this.userRepository.findOrCreateByHumanEntity(player);
+                    user.setName(player.getName());
+                    return user;
                 })
                 .acceptAsync(user -> {
-                    user.save(); // save after changes (async))
-                })
-                .acceptSync(user -> {
-                    player.sendMessage("hi, " + user.getName()); // send message after save
+                    user.save();
+                    this.userCache.add(user);
                 })
                 .execute();
     }
