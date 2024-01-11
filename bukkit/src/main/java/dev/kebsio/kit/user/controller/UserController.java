@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 @RequiredArgsConstructor(onConstructor_= @Inject)
 public class UserController implements Listener {
@@ -21,10 +22,9 @@ public class UserController implements Listener {
     private final UserCache userCache;
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        final Player player = e.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
 
-        // 5 sync task (1 task = 1 tick)
         this.tasker.newChain()
                 .async(() -> {
                     User user=this.userRepository.findOrCreateByHumanEntity(player);
@@ -36,6 +36,19 @@ public class UserController implements Listener {
                     this.userCache.add(user);
                 })
                 .execute();
+
     }
 
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        this.tasker.newChain()
+                .async(() -> this.userCache.findByUUID(player.getUniqueId()))
+                .acceptAsync(user -> {
+                    user.save();
+                    this.userCache.remove(user);
+                })
+                .execute();
+   }
 }
