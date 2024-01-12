@@ -23,7 +23,7 @@ public class User extends Document {
     }
 
     public long getCooldownTime(String name) {
-        return this.kitCooldowns.get(name.toLowerCase());
+        return this.kitCooldowns.getOrDefault(name.toLowerCase(), 0L);
     }
 
     public void addCooldownTime(String name, long time){

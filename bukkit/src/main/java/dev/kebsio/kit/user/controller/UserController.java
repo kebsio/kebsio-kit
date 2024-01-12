@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 @RequiredArgsConstructor(onConstructor_= @Inject)
 public class UserController implements Listener {
 
@@ -32,6 +34,9 @@ public class UserController implements Listener {
                     return user;
                 })
                 .acceptAsync(user -> {
+                    if (user.getKitCooldowns()==null){
+                        user.setKitCooldowns(new ConcurrentHashMap<>());
+                    }
                     user.save();
                     this.userCache.add(user);
                 })
