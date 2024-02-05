@@ -56,7 +56,7 @@ dependencies {
     implementation("eu.okaeri:okaeri-tasker-bukkit:1.2.0")
 
 
-    implementation("com.github.cryptomorin:XSeries:9.7.0")
+    implementation("com.github.cryptomorin:XSeries:9.9.0")
 }
 tasks{
     assemble {
